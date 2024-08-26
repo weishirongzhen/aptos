@@ -260,9 +260,6 @@ class TransactionBuilderRemoteABI {
 
   Future<Map<String, dynamic>> fetchABI(String addr) async {
     dynamic modules = await aptosClient.getAccountModules(addr);
-    if(modules is String){
-      modules = jsonDecode(modules);
-    }
     final abis = (modules as List)
       .map((module) => module["abi"])
       .expand((abi) =>
