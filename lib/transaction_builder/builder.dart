@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:aptos/aptos_types/abi.dart';
@@ -258,7 +259,10 @@ class TransactionBuilderRemoteABI {
   final ABIBuilderConfig builderConfig;
 
   Future<Map<String, dynamic>> fetchABI(String addr) async {
-    final modules = await aptosClient.getAccountModules(addr);
+    dynamic modules = await aptosClient.getAccountModules(addr);
+    if(modules is String){
+      modules = jsonDecode(modules);
+    }
     final abis = (modules as List)
       .map((module) => module["abi"])
       .expand((abi) =>

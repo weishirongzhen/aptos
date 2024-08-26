@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:aptos/aptos.dart';
@@ -27,6 +28,10 @@ class AptosClient with AptosClientInterface {
   Future<AccountData> getAccount(String address) async {
     final path = "$endpoint/accounts/$address";
     final resp = await http.get(path);
+
+    if(resp.data is String){
+      return AccountData.fromJson(jsonDecode(resp.data));
+    }
     return AccountData.fromJson(resp.data);
   }
 
@@ -74,7 +79,7 @@ class AptosClient with AptosClientInterface {
 
 
   /// Blocks ///
-  
+
   Future<dynamic> getBlocksByHeight(int blockHeight, [bool withTransactioins = false]) async {
     final path = "$endpoint/blocks/by_height/$blockHeight?with_transactions=$withTransactioins";
     final resp = await http.get(path);
@@ -88,7 +93,7 @@ class AptosClient with AptosClientInterface {
   }
 
   /// Events ///
-  
+
   Future<dynamic> getEventsByCreationNumber(String address, int creationNumber, {String? start, int? limit}) async {
     final params = <String, dynamic>{};
     if (start != null) params["start"] = start;
@@ -110,7 +115,7 @@ class AptosClient with AptosClientInterface {
   }
 
   /// General ///
-  
+
   Future<dynamic> showOpenAPIExplorer() async {
     final path = "$endpoint/spec";
     final resp = await http.get(path);
@@ -228,7 +233,7 @@ class AptosClient with AptosClientInterface {
   Future<dynamic> simulateRawTransaction(
     dynamic accountOrPubkey,
     RawTransaction rawTransaction,
-    { 
+    {
       bool estimateGasUnitPrice = false,
       bool estimateMaxGasAmount = false,
       bool estimatePrioritizedGasUnitPrice = false
@@ -239,7 +244,7 @@ class AptosClient with AptosClientInterface {
       signedTxn = await AptosClient.generateBCSSimulation(accountOrPubkey, rawTransaction);
     } else if (accountOrPubkey is MultiEd25519PublicKey) {
       final txnBuilder = TransactionBuilderMultiEd25519(
-        accountOrPubkey, 
+        accountOrPubkey,
         (_) {
           final bits = <int>[];
           final signatures = <Ed25519Signature>[];
@@ -329,7 +334,7 @@ class AptosClient with AptosClientInterface {
 
   Future<(BigInt, BigInt)> estimateGas(TransactionRequest transaction) async {
     final txData = await simulateTransaction(
-      transaction, 
+      transaction,
       estimateGasUnitPrice: true,
       estimateMaxGasAmount: true
     );
@@ -403,15 +408,15 @@ class AptosClient with AptosClientInterface {
     { int? timeoutSecs, bool? checkSuccess }
   ) async {
     await waitForTransactionWithResult(
-      txnHash, 
-      timeoutSecs: timeoutSecs, 
+      txnHash,
+      timeoutSecs: timeoutSecs,
       checkSuccess: checkSuccess);
   }
 
   // Generates a signed transaction that can be submitted to the chain for execution.
   static Uint8List generateBCSTransaction(AptosAccount accountFrom, RawTransaction rawTxn) {
     final txnBuilder = TransactionBuilderEd25519(
-      accountFrom.pubKey().toUint8Array(), 
+      accountFrom.pubKey().toUint8Array(),
       (Uint8List signingMessage) => Ed25519Signature(accountFrom.signBuffer(signingMessage).toUint8Array())
     );
 
@@ -420,7 +425,7 @@ class AptosClient with AptosClientInterface {
 
   static SignedTransaction generateBCSRawTransaction(AptosAccount accountFrom, RawTransaction rawTxn) {
     final txnBuilder = TransactionBuilderEd25519(
-      accountFrom.pubKey().toUint8Array(), 
+      accountFrom.pubKey().toUint8Array(),
       (Uint8List signingMessage) => Ed25519Signature(accountFrom.signBuffer(signingMessage).toUint8Array())
     );
 
@@ -453,12 +458,12 @@ class AptosClient with AptosClientInterface {
   //       [bcsToBytes(AccountAddress.fromHex(receiverAddress)), bcsSerializeUint64(BigInt.parse(amount))],
   //     ),
   //   );
-    
+
   //   final rawTxn = await generateRawTransaction(
-  //     accountFrom.accountAddress, 
-  //     entryFunctionPayload, 
-  //     maxGasAmount: maxGasAmount, 
-  //     gasUnitPrice: gasUnitPrice, 
+  //     accountFrom.accountAddress,
+  //     entryFunctionPayload,
+  //     maxGasAmount: maxGasAmount,
+  //     gasUnitPrice: gasUnitPrice,
   //     expireTimestamp: expireTimestamp
   //   );
 
@@ -492,7 +497,7 @@ class AptosClient with AptosClientInterface {
 // Generates a BCS transaction that can be submitted to the chain for simulation.
 static Future<Uint8List> generateBCSSimulation(AptosAccount accountFrom, RawTransaction rawTxn) async {
   final txnBuilder = TransactionBuilderEd25519(
-    accountFrom.pubKey().toUint8Array(), 
+    accountFrom.pubKey().toUint8Array(),
     (Uint8List _signingMessage) => Ed25519Signature(Uint8List(64)));
 
   return txnBuilder.sign(rawTxn);
@@ -564,7 +569,7 @@ static Future<Uint8List> generateBCSSimulation(AptosAccount accountFrom, RawTran
   /// Converts a transaction request produced by [generateTransaction] into a properly
   /// signed transaction, which can then be submitted to the blockchain.
   Uint8List signTransaction(
-    AptosAccount accountFrom, 
+    AptosAccount accountFrom,
     RawTransaction rawTransaction
   ) {
     return AptosClient.generateBCSTransaction(accountFrom, rawTransaction);
