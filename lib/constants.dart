@@ -11,6 +11,8 @@ abstract class Constants {
   static const String testnetIndexer = "https://indexer-testnet.staging.gcp.aptosdev.com/v1/graphql";
   static const String devnetIndexer = "https://indexer-devnet.staging.gcp.aptosdev.com/v1/graphql";
 
+  // https://api.mainnet.aptoslabs.com/v1/graphql
+  // https://api.testnet.aptoslabs.com/v1/graphql
   static bool enableDebugLog = false;
 }
 

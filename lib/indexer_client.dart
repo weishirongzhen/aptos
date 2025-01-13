@@ -4,6 +4,7 @@ import 'package:aptos/models/account_nfts.dart';
 import 'package:aptos/models/coin_activities.dart';
 import 'package:aptos/models/current_token_datas.dart';
 import 'package:aptos/models/current_token_pending_claims.dart';
+import 'package:aptos/models/fungible_asset_balance.dart';
 import 'package:graphql/client.dart';
 
 import 'indexer/queries.dart';
@@ -292,4 +293,22 @@ class IndexerClient {
         document: GetCurrentTokenPendingClaims, variables: variables);
     return CurrentTokenPendingClaims.fromJson(data).currentTokenPendingClaims;
   }
+  Future<List<CurrentFungibleAssetBalances>> getCurrentFungibleAssetBalances({
+    required String ownerAddress,
+    int? offset,
+    int? limit,
+    String? tokenStandard = "v2",
+  }) async {
+    final variables = {
+      "address": ownerAddress,
+      "offset": offset,
+      "limit": limit,
+      "token_standard": tokenStandard,
+    };
+    final data = await queryIndexer(
+        document: GetCurrentFungibleAssetBalances, variables: variables);
+    return FungibleAssetBalance.fromJson(data).currentFungibleAssetBalances;
+  }
+
+
 }

@@ -49,7 +49,7 @@ const TokenDataFieldsFragmentDoc = '''
   collection_data_id_hash
 }
     ''';
-    
+
 const CollectionDataFieldsFragmentDoc = '''
     fragment CollectionDataFields on current_collection_datas {
   metadata_uri
@@ -96,8 +96,9 @@ const GetAccountCurrentTokens = r'''
     last_transaction_version
     property_version
   }
-}''' + TokenDataFieldsFragmentDoc 
-+ CollectionDataFieldsFragmentDoc;
+}''' +
+    TokenDataFieldsFragmentDoc +
+    CollectionDataFieldsFragmentDoc;
 
 const GetAccountTokensCount = r'''
     query getAccountTokensCount($owner_address: String) {
@@ -256,7 +257,8 @@ const GetTokenOwnedFromCollection = r'''
   ) {
     ...CurrentTokenOwnershipFields
   }
-}''' + CurrentTokenOwnershipFieldsFragmentDoc;
+}''' +
+    CurrentTokenOwnershipFieldsFragmentDoc;
 
 // const GetTokenData = r'''
 //     query getTokenData($token_id: String) {
@@ -431,3 +433,28 @@ const GetCurrentTokenPendingClaims = r'''
   }
 ''';
 
+const GetCurrentFungibleAssetBalances = r'''
+    query getCurrentFungibleAssetBalances($address: String, $token_standard: String, $offset: Int, $limit: Int) {
+        current_fungible_asset_balances(
+        where:{
+        owner_address: {_eq: $address}, 
+        token_standard: {_eq: $token_standard},
+        },
+        offset: $offset
+        limit: $limit
+        ) {
+            amount
+            asset_type
+            is_frozen
+            is_primary
+            last_transaction_timestamp
+            last_transaction_version
+            owner_address
+            storage_id
+            token_standard
+             metadata{
+                decimals
+             }
+        }
+    }
+''';

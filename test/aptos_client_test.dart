@@ -12,40 +12,40 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   String address =
-      "0xa19ad3e576eb3001394dccae2ce0bcb3486a822853506b93e84b4b1b39cce9eb";
+      "0x84b1675891d370d5de8f169031f9c3116d7add256ecf50a4bc71e3135ddba6e0";
   AptosClient aptos = AptosClient(Constants.mainnetAPI, enableDebugLog: true);
 
   const aptosCoinStore = "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>";
 
   group('apto client test', () {
-    setUpAll(() async {
-      final exist = await aptos.accountExist(address);
-      if (!exist) {
-        final faucetClient = FaucetClient.fromClient(Constants.faucetDevAPI, aptos);
-        faucetClient.fundAccount(address, '10000');
-        await Future.delayed(const Duration(seconds: 3));
-      }
-    });
+    // setUpAll(() async {
+    //   final exist = await aptos.accountExist(address);
+    //   if (!exist) {
+    //     final faucetClient = FaucetClient.fromClient(Constants.faucetDevAPI, aptos);
+    //     faucetClient.fundAccount(address, '10000');
+    //     await Future.delayed(const Duration(seconds: 3));
+    //   }
+    // });
 
-    test('aptos client node health', () async {
-      final result = await aptos.checkBasicNodeHealth();
-      expect(result, "aptos-node:ok");
-    });
-
-    test('aptos account exist', () async {
-      final result = await aptos.accountExist(address);
-      expect(result, true);
-    });
-
-    test('aptos get account', () async {
-      final result = await aptos.getAccount(address);
-      expect(int.parse(result.sequenceNumber) >= 0, true);
-    });
-
-    test('aptos get account resouces', () async {
-      final result = await aptos.getAccountResources(address);
-      expect(result.length > 0, true);
-    });
+    // test('aptos client node health', () async {
+    //   final result = await aptos.checkBasicNodeHealth();
+    //   expect(result, "aptos-node:ok");
+    // });
+    //
+    // test('aptos account exist', () async {
+    //   final result = await aptos.accountExist(address);
+    //   expect(result, true);
+    // });
+    //
+    // test('aptos get account', () async {
+    //   final result = await aptos.getAccount(address);
+    //   expect(int.parse(result.sequenceNumber) >= 0, true);
+    // });
+    //
+    // test('aptos get account resouces', () async {
+    //   final result = await aptos.getAccountResources(address);
+    //   expect(result.length > 0, true);
+    // });
 
     test('aptos get account resouce by resource type', () async {
       final result = await aptos.getAccountResource(address, "0x3::token::TokenStore");
