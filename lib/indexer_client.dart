@@ -293,7 +293,7 @@ class IndexerClient {
         document: GetCurrentTokenPendingClaims, variables: variables);
     return CurrentTokenPendingClaims.fromJson(data).currentTokenPendingClaims;
   }
-  Future<List<CurrentFungibleAssetBalances>> getCurrentFungibleAssetBalances({
+  Future<List<CurrentFungibleAssetBalances>> getCurrentFungibleAssetsBalances({
     required String ownerAddress,
     int? offset,
     int? limit,
@@ -306,9 +306,28 @@ class IndexerClient {
       "token_standard": tokenStandard,
     };
     final data = await queryIndexer(
-        document: GetCurrentFungibleAssetBalances, variables: variables);
+        document: GetCurrentFungibleAssetsBalances, variables: variables);
     return FungibleAssetBalance.fromJson(data).currentFungibleAssetBalances;
   }
 
+
+  Future<List<CurrentFungibleAssetBalances>> getCurrentFungibleAssetBalances({
+    required String ownerAddress,
+    required String assetType,
+    int? offset,
+    int? limit,
+    String? tokenStandard = "v2",
+  }) async {
+    final variables = {
+      "address": ownerAddress,
+      "offset": offset,
+      "limit": limit,
+      "token_standard": tokenStandard,
+      "asset_type":assetType,
+    };
+    final data = await queryIndexer(
+        document: GetCurrentFungibleAssetBalances, variables: variables);
+    return FungibleAssetBalance.fromJson(data).currentFungibleAssetBalances;
+  }
 
 }

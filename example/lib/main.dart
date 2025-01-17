@@ -64,15 +64,25 @@ class _MyHomePageState extends State<MyHomePage> {
     //
     // print("wtf2 ${res2}");
 
+    final indexerClient = IndexerClient(Constants.mainnetIndexer);
 
-   final indexerClient = IndexerClient(Constants.mainnetIndexer);
+    // final coins =  await indexerClient.getAccountCoinsData(ownerAddress: '0x84b1675891d370d5de8f169031f9c3116d7add256ecf50a4bc71e3135ddba6e0');
+    //
+    //  print("wtf coins ${coins}");
+    //
+    final dy = await indexerClient.getCurrentFungibleAssetBalances(
+      ownerAddress: '0x3f5d63ce3e32372246dbeb44dc7290ec66ac491727561b0d160e6c81bbe8645d',
+      assetType: '0x2ebb2ccac5e027a87fa0e2e5f656a3a4238d6a48d93ec9b610d570fc0aa0df12',
+    );
+    debugPrint(
+        "wtf dy ${dy.map((e) => '${e.assetType}  - ${e.metadata?.symbol} - ${e.metadata?.name} -  ${e.amount}')}");
 
-   // final coins =  await indexerClient.getAccountCoinsData(ownerAddress: '0x84b1675891d370d5de8f169031f9c3116d7add256ecf50a4bc71e3135ddba6e0');
-   //
-   //  print("wtf coins ${coins}");
-   //
-    final dy = await indexerClient.getCurrentFungibleAssetBalances(ownerAddress: '0x84b1675891d370d5de8f169031f9c3116d7add256ecf50a4bc71e3135ddba6e0');
-    print("wtf dy ${dy.first}");
+    final dy2 = await indexerClient.getCurrentFungibleAssetsBalances(
+      ownerAddress: '0x3f5d63ce3e32372246dbeb44dc7290ec66ac491727561b0d160e6c81bbe8645d',
+
+    );
+    debugPrint(
+        "wtf dy2 ${dy2.map((e) => '${e.assetType}  - ${e.metadata?.symbol} - ${e.metadata?.name} -  ${e.amount}')}");
   }
 
   Future<dynamic> _transferWithEncodeSubmissionAPI(String privateKey, String receiverAddress, BigInt amount,

@@ -433,7 +433,7 @@ const GetCurrentTokenPendingClaims = r'''
   }
 ''';
 
-const GetCurrentFungibleAssetBalances = r'''
+const GetCurrentFungibleAssetsBalances = r'''
     query getCurrentFungibleAssetBalances($address: String, $token_standard: String, $offset: Int, $limit: Int) {
         current_fungible_asset_balances(
         where:{
@@ -454,6 +454,37 @@ const GetCurrentFungibleAssetBalances = r'''
             token_standard
              metadata{
                 decimals
+                name
+                symbol
+             }
+        }
+    }
+''';
+
+const GetCurrentFungibleAssetBalances = r'''
+    query getCurrentFungibleAssetBalances($address: String, $asset_type: String, $token_standard: String, $offset: Int, $limit: Int) {
+        current_fungible_asset_balances(
+        where:{
+        owner_address: {_eq: $address}, 
+        token_standard: {_eq: $token_standard},
+        asset_type: {_eq: $asset_type},
+        },
+        offset: $offset
+        limit: $limit
+        ) {
+            amount
+            asset_type
+            is_frozen
+            is_primary
+            last_transaction_timestamp
+            last_transaction_version
+            owner_address
+            storage_id
+            token_standard
+             metadata{
+                decimals
+                name
+                symbol
              }
         }
     }

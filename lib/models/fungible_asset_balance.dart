@@ -37,6 +37,8 @@ class Metadata with _$Metadata {
   const factory Metadata({
     @JsonKey(name: '__typename') String? Typename,
     @JsonKey(name: 'decimals') int? decimals,
+    @JsonKey(name: 'name') String? name,
+    @JsonKey(name: 'symbol') String? symbol,
   }) = _Metadata;
 
   factory Metadata.fromJson(Map<String, Object?> json) => _$MetadataFromJson(json);

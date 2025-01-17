@@ -64,10 +64,14 @@ _$MetadataImpl _$$MetadataImplFromJson(Map<String, dynamic> json) =>
     _$MetadataImpl(
       Typename: json['__typename'] as String?,
       decimals: (json['decimals'] as num?)?.toInt(),
+      name: json['name'] as String?,
+      symbol: json['symbol'] as String?,
     );
 
 Map<String, dynamic> _$$MetadataImplToJson(_$MetadataImpl instance) =>
     <String, dynamic>{
       '__typename': instance.Typename,
       'decimals': instance.decimals,
+      'name': instance.name,
+      'symbol': instance.symbol,
     };

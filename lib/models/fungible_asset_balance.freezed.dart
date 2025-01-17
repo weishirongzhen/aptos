@@ -254,6 +254,10 @@ mixin _$Metadata {
   String? get Typename => throw _privateConstructorUsedError;
   @JsonKey(name: 'decimals')
   int? get decimals => throw _privateConstructorUsedError;
+  @JsonKey(name: 'name')
+  String? get name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'symbol')
+  String? get symbol => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 }
@@ -263,7 +267,9 @@ mixin _$Metadata {
 class _$MetadataImpl implements _Metadata {
   const _$MetadataImpl(
       {@JsonKey(name: '__typename') this.Typename,
-      @JsonKey(name: 'decimals') this.decimals});
+      @JsonKey(name: 'decimals') this.decimals,
+      @JsonKey(name: 'name') this.name,
+      @JsonKey(name: 'symbol') this.symbol});
 
   factory _$MetadataImpl.fromJson(Map<String, dynamic> json) =>
       _$$MetadataImplFromJson(json);
@@ -274,10 +280,16 @@ class _$MetadataImpl implements _Metadata {
   @override
   @JsonKey(name: 'decimals')
   final int? decimals;
+  @override
+  @JsonKey(name: 'name')
+  final String? name;
+  @override
+  @JsonKey(name: 'symbol')
+  final String? symbol;
 
   @override
   String toString() {
-    return 'Metadata(Typename: $Typename, decimals: $decimals)';
+    return 'Metadata(Typename: $Typename, decimals: $decimals, name: $name, symbol: $symbol)';
   }
 
   @override
@@ -291,7 +303,9 @@ class _$MetadataImpl implements _Metadata {
 abstract class _Metadata implements Metadata {
   const factory _Metadata(
       {@JsonKey(name: '__typename') final String? Typename,
-      @JsonKey(name: 'decimals') final int? decimals}) = _$MetadataImpl;
+      @JsonKey(name: 'decimals') final int? decimals,
+      @JsonKey(name: 'name') final String? name,
+      @JsonKey(name: 'symbol') final String? symbol}) = _$MetadataImpl;
 
   factory _Metadata.fromJson(Map<String, dynamic> json) =
       _$MetadataImpl.fromJson;
@@ -302,4 +316,10 @@ abstract class _Metadata implements Metadata {
   @override
   @JsonKey(name: 'decimals')
   int? get decimals;
+  @override
+  @JsonKey(name: 'name')
+  String? get name;
+  @override
+  @JsonKey(name: 'symbol')
+  String? get symbol;
 }
